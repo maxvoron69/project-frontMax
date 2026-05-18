@@ -1,11 +1,460 @@
 <html>
 <head>
-    <title>RPG</title>
-    <script src=https://code.jquery.com/jquery-3.6.0.min.js></script>
+    <meta charset="UTF-8">
+    <title>RPG Admin Panel</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="/css/my.css" rel="stylesheet">
 </head>
 <body>
-<h1>RPG admin panel</h1>
+<div class="container">
+    <h1 class="my-4 text-center"><i class="fas fa-users-cog"></i> RPG Admin Panel</h1>
 
+<div class="card mb-4">
+        <div class="card-body p-0">
+            <table id="playersTable" class="table table-hover mb-0">
+    <thead>
+        <tr>
+            <th style="border: 1px solid #ddd; padding: 8px; background-color: #007bff;">#</th>
+            <th style="border: 1px solid #ddd; padding: 8px; background-color: #007bff;">Name</th>
+            <th style="border: 1px solid #ddd; padding: 8px; background-color: #007bff;">Title</th>
+            <th style="border: 1px solid #ddd; padding: 8px; background-color: #007bff;">Race</th>
+            <th style="border: 1px solid #ddd; padding: 8px; background-color: #007bff;">Profession</th>
+            <th style="border: 1px solid #ddd; padding: 8px; background-color: #007bff;">Level</th>
+            <th style="border: 1px solid #ddd; padding: 8px; background-color: #007bff;">Birthday</th>
+            <th style="border: 1px solid #ddd; padding: 8px; background-color: #007bff;">Banned</th>
+            <th style="border: 1px solid #ddd; padding: 8px; background-color: #007bff;">Edit</th>
+            <th style="border: 1px solid #ddd; padding: 8px; background-color: #007bff;">Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Данные будут добавлены через JavaScript -->
+    </tbody>
+</table>
+        </div>
+    </div>
+
+<div class="d-flex justify-content-between align-items-center my-3">
+        <div>
+            <label for="pageSizeSelect" class="me-2">Items per page:</label>
+            <select id="pageSizeSelect" class="form-select d-inline-block" style="width: auto;">
+                <option value="3">3</option>
+                <option value="5">5</option>
+                <option value="10" selected>10</option>
+                <option value="20">20</option>
+            </select>
+        </div>
+        <nav>
+            <ul id="pageButtons" class="pagination mb-0"></ul>
+        </nav>
+    </div>
+    <label for="pageSizeSelect">Count per page:</label>
+    <select id="pageSizeSelect" style="margin: 0 10px;">
+        <option value="3">3</option>
+        <option value="5">5</option>
+        <option value="10" selected>10</option>
+        <option value="20">20</option>
+    </select>
+    <div id="pageButtons" style="display: flex; gap: 5px; margin-left: 10px;">
+        <!-- Кнопки страниц: 1, 2, 3... -->
+    </div>
+</div>
+
+<hr style="margin: 20px 0; border: 0; border-top: 1px solid #ccc;">
+
+    <hr>
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0"><i class="fas fa-plus-circle"></i> Create New Account</h3>
+        </div>
+        <div class="card-body">
+                <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="createName" class="form-label">Name <span class="text-danger">*</span></label>
+                    <input type="text" id="createName" class="form-control" maxlength="12" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="createTitle" class="form-label">Title <span class="text-danger">*</span></label>
+                    <input type="text" id="createTitle" class="form-control" maxlength="30" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="createRace" class="form-label">Race <span class="text-danger">*</span></label>
+                    <select id="createRace" class="form-select" required>            <option value="HUMAN">HUMAN</option>
+            <option value="DWARF">DWARF</option>
+            <option value="ELF">ELF</option>
+            <option value="GIANT">GIANT</option>
+            <option value="ORC">ORC</option>
+            <option value="TROLL">TROLL</option>
+            <option value="HOBBIT">HOBBIT</option>
+        </select>
+
+                </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="createProfession" class="form-label">Profession <span class="text-danger">*</span></label>
+                    <select id="createProfession" class="form-select" required>
+            <option value="WARRIOR">WARRIOR</option>
+            <option value="ROGUE">ROGUE</option>
+            <option value="SORCERER">SORCERER</option>
+            <option value="CLERIC">CLERIC</option>
+            <option value="PALADIN">PALADIN</option>
+            <option value="NAZGUL">NAZGUL</option>
+            <option value="WARLOCK">WARLOCK</option>
+            <option value="ASSASSIN">ASSASSIN</option>
+        </select>
+
+                </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="createLevel" class="form-label">Level <span class="text-danger">*</span></label>
+                    <input type="number" id="createLevel" class="form-control" min="0" max="100" value="1" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="createBirthday" class="form-label">Birthday <span class="text-danger">*</span></label>
+                    <input type="date" id="createBirthday" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="createBanned" class="form-label">Banned</label>
+                    <select id="createBanned" class="form-select">
+            <option value="false">No</option>
+            <option value="true">Yes</option>
+                <option value="false">No</option>
+                <option value="true">Yes</option>
+            </select>
+        </div>
+    </div>
+    <div class="d-grid">
+        <button id="createPlayerBtn" class="btn btn-success mt-3">
+            <i class="fas fa-save"></i> Create Player
+        </button>
+    </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        let currentPage = 0;
+        let pageSize = 10;
+        let totalPages = 0;
+
+        function loadPlayerCount() {
+            $.get("/rest/players/count", function(count) {
+                totalPages = Math.ceil(count / pageSize);
+                loadPlayers();
+                renderPageButtons();
+            }).fail(function() {
+                console.error("Failed to load player count");
+            });
+        }
+
+        function loadPlayers() {
+            const params = `?pageNumber=${currentPage}&pageSize=${pageSize}`;
+            $.get("/rest/players" + params, function(players) {
+                const tbody = $("#playersTable tbody");
+                tbody.empty();
+                players.forEach(player => {
+                    const bannedText = player.banned ? "Yes" : "No";
+                    const row = `<tr data-player-id=\"${player.id}\">
+                        <td>${player.id}</td>
+                        <td>${player.name}</td>
+                        <td>${player.title}</td>
+                        <td>${player.race}</td>
+                        <td>${player.profession}</td>
+                        <td>${player.level}</td>
+                        <td>${new Date(player.birthday).toLocaleDateString()}</td>
+                        <td>${bannedText}</td>
+                        <td style=\"text-align: center;\">
+                            <button class=\"btn btn-sm btn-warning\" title=\"Edit\" onclick=\"editPlayer(${player.id})\">
+                                <i class=\"fas fa-edit\"></i>
+                            </button>
+                        </td>
+                        <td style=\"text-align: center;\">
+                            <button class=\"btn btn-sm btn-danger\" title=\"Delete\" onclick=\"deletePlayer(${player.id})\">
+                                <i class=\"fas fa-trash-alt\"></i>
+                            </button>
+                        </td>
+                    </tr>`;
+                    tbody.append(row);
+                });
+            }).fail(function() {
+                console.error("Failed to load players");
+            });
+        }
+
+        function renderPageButtons() {
+            const container = $("#pageButtons");
+            container.empty();
+
+            if (totalPages <= 1) return;
+
+            const maxButtons = 5;
+            let start = Math.max(0, currentPage - 2);
+            let end = Math.min(totalPages, start + maxButtons);
+
+            if (end - start < maxButtons) {
+                start = Math.max(0, end - maxButtons);
+            }
+
+            // Кнопка "Назад"
+            container.append(`
+                <li class="page-item ${currentPage === 0 ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="event.preventDefault(); prevPage()">&laquo;</a>
+                </li>
+            `);
+
+            // Кнопка "1"
+            if (start > 0) {
+                addButton(0, '1');
+                if (start > 1) {
+                    container.append('<li class="page-item disabled"><span class="page-link">…</span></li>');
+                }
+            }
+
+            // Основные кнопки
+            for (let i = start; i < end; i++) {
+                addButton(i, (i + 1).toString(), i === currentPage);
+            }
+
+            // Кнопка "Последняя"
+            if (end < totalPages) {
+                if (end < totalPages - 1) {
+                    container.append('<li class="page-item disabled"><span class="page-link">…</span></li>');
+                }
+                addButton(totalPages - 1, totalPages.toString());
+            }
+
+            // Кнопка "Вперёд"
+            container.append(`
+                <li class="page-item ${currentPage >= totalPages - 1 ? 'disabled' : ''}">
+                    <a class="page-link" href="#" onclick="event.preventDefault(); nextPage()">&raquo;</a>
+                </li>
+            `);
+        }
+
+        function addButton(page, label, active = false) {
+            const li = $(`<li class="page-item ${active ? 'active' : ''}"><a class="page-link" href="#" onclick="event.preventDefault(); gotoPage(${page})">${label}</a></li>`);
+            $("#pageButtons").append(li);
+        }
+
+        function prevPage() {
+            if (currentPage > 0) {
+                currentPage--;
+                loadPlayers();
+                renderPageButtons();
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages - 1) {
+                currentPage++;
+                loadPlayers();
+                renderPageButtons();
+            }
+        }
+
+        function gotoPage(page) {
+            if (page !== currentPage) {
+                currentPage = page;
+                loadPlayers();
+                renderPageButtons();
+            }
+        }
+
+        $("#pageSizeSelect").change(function() {
+            pageSize = parseInt($(this).val());
+            currentPage = 0;
+            loadPlayerCount();
+        });
+
+        // Инициализация
+        loadPlayerCount();
+
+        // Функция создания нового игрока
+        $("#createPlayerBtn").click(function() {
+            const name = $("#createName").val().trim();
+            const title = $("#createTitle").val().trim();
+            const race = $("#createRace").val();
+            const profession = $("#createProfession").val();
+            const level = parseInt($("#createLevel").val());
+            const birthday = new Date($("#createBirthday").val()).getTime();
+            const banned = $("#createBanned").val() === 'true';
+
+            // Валидация
+            if (!name || name.length < 1 || name.length > 12) {
+                alert("Name must be 1-12 characters");
+                return;
+            }
+            if (!title || title.length > 30) {
+                alert("Title must be up to 30 characters");
+                return;
+            }
+            if (isNaN(level) || level < 0 || level > 100) {
+                alert("Level must be 0-100");
+                return;
+            }
+            if (!$("#createBirthday").val()) {
+                alert("Birthday is required");
+                return;
+            }
+
+            // Отправка POST-запроса
+            $.ajax({
+                url: "/rest/players",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    name: name,
+                    title: title,
+                    race: race,
+                    profession: profession,
+                    level: level,
+                    birthday: birthday,
+                    banned: banned
+                }),
+                success: function() {
+                    alert("Player created successfully");
+                    $("#createName").val("");
+                    $("#createTitle").val("");
+                    $("#createLevel").val(1);
+                    $("#createBirthday").val("");
+                    $("#createBanned").val("false");
+                    loadPlayerCount(); // Обновить таблицу
+                },
+                error: function() {
+                    alert("Failed to create player");
+                }
+            });
+        });
+
+        // Функции редактирования и удаления
+        // Режим редактирования
+        let editingPlayerId = null;
+
+        window.editPlayer = function(id) {
+            if (editingPlayerId !== null) {
+                alert("Already editing a player");
+                return;
+            }
+
+            editingPlayerId = id;
+            const row = $("tr[data-player-id='" + id + "']");
+
+            // Скрываем кнопку Delete
+            row.find("td:last").hide();
+
+            // Меняем кнопку Edit на Save
+            const editCell = row.find("td:nth-child(9)");
+            editCell.html(`
+                <button class=\"btn btn-sm btn-success\" title=\"Save\" onclick=\"savePlayer(${id})\">
+                    <i class=\"fas fa-save\"></i>
+                </button>
+            `);
+
+            // Поля для редактирования (пока просто текст, можно заменить на input)
+            const cells = row.find("td");
+            // Name
+            $(cells[1]).html(`<input type=\"text\" value=\"${$(cells[1]).text()}\" style=\"width: 100%;\">`);
+            // Title
+            $(cells[2]).html(`<input type=\"text\" value=\"${$(cells[2]).text()}\" style=\"width: 100%;\">`);
+            // Race
+            const race = $(cells[3]).text();
+            $(cells[3]).html(`
+                <select style=\"width: 100%;\">
+                    <option value=\"HUMAN\" ${race === 'HUMAN' ? 'selected' : ''}>HUMAN</option>
+                    <option value=\"DWARF\" ${race === 'DWARF' ? 'selected' : ''}>DWARF</option>
+                    <option value=\"ELF\" ${race === 'ELF' ? 'selected' : ''}>ELF</option>
+                    <option value=\"GIANT\" ${race === 'GIANT' ? 'selected' : ''}>GIANT</option>
+                    <option value=\"ORC\" ${race === 'ORC' ? 'selected' : ''}>ORC</option>
+                    <option value=\"TROLL\" ${race === 'TROLL' ? 'selected' : ''}>TROLL</option>
+                    <option value=\"HOBBIT\" ${race === 'HOBBIT' ? 'selected' : ''}>HOBBIT</option>
+                </select>
+            `);
+            // Profession
+            const profession = $(cells[4]).text();
+            $(cells[4]).html(`
+                <select style=\"width: 100%;\">
+                    <option value=\"WARRIOR\" ${profession === 'WARRIOR' ? 'selected' : ''}>WARRIOR</option>
+                    <option value=\"ROGUE\" ${profession === 'ROGUE' ? 'selected' : ''}>ROGUE</option>
+                    <option value=\"SORCERER\" ${profession === 'SORCERER' ? 'selected' : ''}>SORCERER</option>
+                    <option value=\"CLERIC\" ${profession === 'CLERIC' ? 'selected' : ''}>CLERIC</option>
+                    <option value=\"PALADIN\" ${profession === 'PALADIN' ? 'selected' : ''}>PALADIN</option>
+                    <option value=\"NAZGUL\" ${profession === 'NAZGUL' ? 'selected' : ''}>NAZGUL</option>
+                    <option value=\"WARLOCK\" ${profession === 'WARLOCK' ? 'selected' : ''}>WARLOCK</option>
+                    <option value=\"ASSASSIN\" ${profession === 'ASSASSIN' ? 'selected' : ''}>ASSASSIN</option>
+                </select>
+            `);
+            // Banned
+            const bannedText = $(cells[7]).text();
+            $(cells[7]).html(`
+                <select style=\"width: 100%;\">
+                    <option value=\"false\" ${bannedText === 'No' ? 'selected' : ''}>No</option>
+                    <option value=\"true\" ${bannedText === 'Yes' ? 'selected' : ''}>Yes</option>
+                </select>
+            `);
+        };
+
+        window.savePlayer = function(id) {
+            const row = $("tr[data-player-id='" + id + "']");
+            const name = row.find("input")[0].value;
+            const title = row.find("input")[1].value;
+            const race = row.find("select")[0].value;
+            const profession = row.find("select")[1].value;
+            const banned = row.find("select")[2].value === 'true';
+
+            // Валидация
+            if (!name || name.length > 12) {
+                alert("Name must be 1-12 characters");
+                return;
+            }
+            if (title.length > 30) {
+                alert("Title must be up to 30 characters");
+                return;
+            }
+            if (isNaN(level) || level < 1 || level > 100) {
+                alert("Level must be 1-100");
+                return;
+            }
+
+            // Отправка PATCH-запроса
+            $.ajax({
+                url: "/rest/players/" + id,
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    name: name,
+                    title: title,
+                    level: level,
+                    banned: banned
+                }),
+                success: function() {
+                    editingPlayerId = null;
+                    loadPlayers(); // Перезагружаем таблицу
+                },
+                error: function() {
+                    console.error("Failed to save player");
+                    alert("Failed to save player");
+                }
+            });
+        };
+
+        window.deletePlayer = function(id) {
+            if (confirm("Are you sure you want to delete player " + id + "?")) {
+                $.ajax({
+                    url: "/rest/players/" + id,
+                    type: "DELETE",
+                    success: function() {
+                        alert("Player deleted");
+                        loadPlayerCount(); // Перезагрузить данные
+                    },
+                    error: function() {
+                        console.error("Failed to delete player");
+                    }
+                });
+            }
+        };
+    });
+</script>
 </body>
 </html>
